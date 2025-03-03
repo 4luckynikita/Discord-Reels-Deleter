@@ -3,6 +3,8 @@
 Attach this Python script to your Discord bot to prevent the sending of Instagram Reels from a specific user in your server. This was built half as a joke, half out of curiosity. Enjoy!
 
 *Note: Ensure you have Python and Pipenv installed!*
+### Prerequisite - Set up a bot on [Discord's Developer Portal](https://discord.com/developers) and add it to a server of your choice.
+Ensure bot has permissions to send and manage messages in the OAuth page.
 
 ## SETUP AND RUN FOR LOCAL USE
 ### 1. Clone the repo
