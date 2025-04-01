@@ -1,6 +1,6 @@
 # Discord Reels Deleter
 
-Attach this Python script to your Discord bot to prevent the sending of Instagram Reels from a specific user in your server. This was built half as a joke, half out of curiosity. Enjoy!
+Attach this Python script to your Discord bot to prevent the sending of Instagram Reels from a specific user in your server. This was built half as a joke, half out of curiosity. This bot has spiraled into more than just a surface level joke so it has more random features going for it now. Enjoy!
 
 *Note: Ensure you have Python and Pipenv installed!*
 ### Prerequisite - Set up a bot on [Discord's Developer Portal](https://discord.com/developers) and add it to a server of your choice.
