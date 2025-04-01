@@ -30,6 +30,7 @@ def add_blocked_term(term):
         blockedTerms.append(term)
         return True
     return False
+
 def remove_blocked_term(term):
     term = term.lower().strip()
     if term in blockedTerms:
@@ -38,9 +39,9 @@ def remove_blocked_term(term):
             with open(BLOCKED_TERMS_FILE, "r", encoding="utf-8") as f:
                 lines = [line.strip() for line in f.readlines()]  # Strip whitespace and newlines
 
-            # Write back only terms that are not removed and not empty
+            # Write back only terms that are not removed
             with open(BLOCKED_TERMS_FILE, "w", encoding="utf-8") as f:
-                f.writelines(f"{line}\n" for line in lines if line and line.lower() != term)
+                f.writelines(f"{line}\n" for line in lines if line.lower() != term)
 
             return True
         except Exception as e:
@@ -64,7 +65,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 tree = bot.tree
 
 # Feel free to tweak this for a different keyword to block
-INSTAGRAM_URL = "instagram.com"
+TARGET_URLS = ["instagram.com", "youtube.com/shorts", "youtu.be"]
 
 @tree.command(name="blockterm", description="Block a new term by adding it to the list.")
 async def blockterm(interaction: discord.Interaction, term: str):
@@ -84,8 +85,7 @@ async def unblockterm(interaction: discord.Interaction, term: str):
 async def on_ready():
     print(f"Logged in as {bot.user}")
     print("Blocked terms loaded:")
-    for term in blockedTerms:
-        print(term)
+    print("\n".join(blockedTerms))
     print(f"Blocked term response: {blockedTermResponse}")
 
     try:
@@ -98,20 +98,25 @@ async def on_ready():
 async def on_message(message):
     if message.author == bot.user:
         return
+    print(f"Message from {message.author} in #{message.channel.name}: {message.content}")
 
     if check_common_term(message.content.split(' '), blockedTerms):
         try:
             await message.channel.send(blockedTermResponse)
         except discord.Forbidden:
             print("Missing permissions to send messages.")
+        else:
+            print(f"Sent blocked term response in #{message.channel.name}")
 
-    if message.author.id == TARGET_USER_ID and INSTAGRAM_URL in message.content:
+    if message.author.id == TARGET_USER_ID and any(url in message.content for url in TARGET_URLS):
+        print(f"Detected target URL from user {message.author} in channel #{message.channel.name}")
         if ALLOWED_CHANNEL_ID and message.channel.id == ALLOWED_CHANNEL_ID:
             return
         
         try:
             await message.delete()
             await message.channel.send("Nuh uh, no reels in discord #ratio plz send in proper channel 🍊")
+            print(f"Deleted message and sent response in #{message.channel.name}")
         except discord.Forbidden:
             print("Missing permissions to send or delete messages.")
         except discord.NotFound:
